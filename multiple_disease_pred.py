@@ -3,20 +3,17 @@ import streamlit as st
 from streamlit_option_menu import option_menu
 
 # Loading the saved models
-
-# streamlit run "C:\Users\deepa\OneDrive\Documents\Desktop\Multiple Disease Prediction\multiple disease pred.py"
-
 diabetes_model = pickle.load(open("diabetes_model.sav", 'rb')) 
-heart_disease_model = pickle.load(open("heart_disease_model.sav", 'rb'))
+heart_disease_model = pickle.load(open("heart_disease_model.sav", 'rb')) 
 
 # Sidebar for navigation
-
 with st.sidebar:
-    selected = option_menu('Multiple Disease Prediction System',['Diabetes Prediction', 'Heart Disease Prediction'], icons = ['activity', 'heart'], default_index = 0)
+    selected = option_menu('Multiple Disease Prediction System',
+                           ['Diabetes Prediction', 'Heart Disease Prediction'], 
+                           icons = ['activity', 'heart'], default_index = 0)
 
 # Diabetes Prediction Page 
-
-if(selected == 'Diabetes Prediction'):
+if selected == 'Diabetes Prediction':
     st.title('Diabetes Prediction')
     # getting the input data from the user
     col1, col2, col3 = st.columns(3)
@@ -45,32 +42,30 @@ if(selected == 'Diabetes Prediction'):
     with col2:
         Age = st.text_input('Age of the Person')
 
-
     # code for Prediction
     diab_diagnosis = ''
 
     # creating a button for Prediction
-
     if st.button('Diabetes Test Result'):
-    try:
-        user_input = [Pregnancies, Glucose, BloodPressure, SkinThickness, Insulin,
-                      BMI, DiabetesPedigreeFunction, Age]
+        try:
+            user_input = [Pregnancies, Glucose, BloodPressure, SkinThickness, Insulin,
+                          BMI, DiabetesPedigreeFunction, Age]
+            
+            user_input = [float(x) for x in user_input]
 
-        user_input = [float(x) for x in user_input]
+            diab_prediction = diabetes_model.predict([user_input])
 
-        diab_prediction = diabetes_model.predict([user_input])
+            if diab_prediction[0] == 1:
+                diab_diagnosis = 'The person is diabetic'
+            else:
+                diab_diagnosis = 'The person is not diabetic'
+        except ValueError:
+            diab_diagnosis = "Please enter valid numeric values for all fields."
 
-        if diab_prediction[0] == 1:
-            diab_diagnosis = 'The person is diabetic'
-        else:
-            diab_diagnosis = 'The person is not diabetic'
-    except ValueError:
-        diab_diagnosis = "Please enter valid numeric values for all fields."
-
-st.success(diab_diagnosis)
+    st.success(diab_diagnosis)
 
 
-if(selected == 'Heart Disease Prediction'):
+if selected == 'Heart Disease Prediction':
     st.title('Heart Disease Prediction')
 
     col1, col2, col3 = st.columns(3)
@@ -118,20 +113,19 @@ if(selected == 'Heart Disease Prediction'):
     heart_diagnosis = ''
 
     # creating a button for Prediction
-
     if st.button('Heart Disease Test Result'):
+        try:
+            user_input = [age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal]
 
-        user_input = [age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal]
+            user_input = [float(x) for x in user_input]
 
-        user_input = [float(x) for x in user_input]
+            heart_prediction = heart_disease_model.predict([user_input])
 
-        heart_prediction = heart_disease_model.predict([user_input])
-
-        if heart_prediction[0] == 1:
-            heart_diagnosis = 'The person is having heart disease'
-        else:
-            heart_diagnosis = 'The person does not have any heart disease'
+            if heart_prediction[0] == 1:
+                heart_diagnosis = 'The person is having heart disease'
+            else:
+                heart_diagnosis = 'The person does not have any heart disease'
+        except ValueError:
+            heart_diagnosis = "Please enter valid numeric values for all fields."
 
     st.success(heart_diagnosis)
-
-
