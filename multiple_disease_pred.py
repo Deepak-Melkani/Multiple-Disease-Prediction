@@ -52,22 +52,22 @@ if(selected == 'Diabetes Prediction'):
     # creating a button for Prediction
 
     if st.button('Diabetes Test Result'):
-        try:
-            user_input = [Pregnancies, Glucose, BloodPressure, SkinThickness, Insulin,
-                          BMI, DiabetesPedigreeFunction, Age]
-    
-            user_input = [float(x) for x in user_input]
-    
-            diab_prediction = diabetes_model.predict([user_input])
-    
-            if diab_prediction[0] == 1:
-                diab_diagnosis = 'The person is diabetic'
-            else:
-                diab_diagnosis = 'The person is not diabetic'
-        except ValueError:
+    try:
+        user_input = [Pregnancies, Glucose, BloodPressure, SkinThickness, Insulin,
+                      BMI, DiabetesPedigreeFunction, Age]
+
+        user_input = [float(x) for x in user_input]
+
+        diab_prediction = diabetes_model.predict([user_input])
+
+        if diab_prediction[0] == 1:
+            diab_diagnosis = 'The person is diabetic'
+        else:
+            diab_diagnosis = 'The person is not diabetic'
+    except ValueError:
         diab_diagnosis = "Please enter valid numeric values for all fields."
 
-    st.success(diab_diagnosis)
+st.success(diab_diagnosis)
 
 
 if(selected == 'Heart Disease Prediction'):
@@ -133,4 +133,5 @@ if(selected == 'Heart Disease Prediction'):
             heart_diagnosis = 'The person does not have any heart disease'
 
     st.success(heart_diagnosis)
+
 
