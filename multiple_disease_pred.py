@@ -6,9 +6,8 @@ from streamlit_option_menu import option_menu
 
 # streamlit run "C:\Users\deepa\OneDrive\Documents\Desktop\Multiple Disease Prediction\multiple disease pred.py"
 
-diabetes_model = pickle.load(open("C:/Users/deepa/Downloads/diabetes_model.sav", 'rb')) 
-
-heart_disease_model = pickle.load(open("c:/Users/deepa/Downloads/heart_disease_model.sav", 'rb')) 
+diabetes_model = pickle.load(open("diabetes_model.sav", 'rb')) 
+heart_disease_model = pickle.load(open("heart_disease_model.sav", 'rb'))
 
 # Sidebar for navigation
 
@@ -53,18 +52,20 @@ if(selected == 'Diabetes Prediction'):
     # creating a button for Prediction
 
     if st.button('Diabetes Test Result'):
-
-        user_input = [Pregnancies, Glucose, BloodPressure, SkinThickness, Insulin,
-                      BMI, DiabetesPedigreeFunction, Age]
-
-        user_input = [float(x) for x in user_input]
-
-        diab_prediction = diabetes_model.predict([user_input])
-
-        if diab_prediction[0] == 1:
-            diab_diagnosis = 'The person is diabetic'
-        else:
-            diab_diagnosis = 'The person is not diabetic'
+        try:
+            user_input = [Pregnancies, Glucose, BloodPressure, SkinThickness, Insulin,
+                          BMI, DiabetesPedigreeFunction, Age]
+    
+            user_input = [float(x) for x in user_input]
+    
+            diab_prediction = diabetes_model.predict([user_input])
+    
+            if diab_prediction[0] == 1:
+                diab_diagnosis = 'The person is diabetic'
+            else:
+                diab_diagnosis = 'The person is not diabetic'
+        except ValueError:
+        diab_diagnosis = "Please enter valid numeric values for all fields."
 
     st.success(diab_diagnosis)
 
@@ -132,3 +133,4 @@ if(selected == 'Heart Disease Prediction'):
             heart_diagnosis = 'The person does not have any heart disease'
 
     st.success(heart_diagnosis)
+
